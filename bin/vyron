@@ -1,0 +1,16 @@
+#! /usr/bin/env node
+
+const program = require('commander');
+const { getVersion, printVersion } = require('../util');
+const config = require('../config').default;
+
+printVersion();
+
+program
+    .version(getVersion())
+    .usage('<command> [options]')
+    .command(`create [${config.program}] [projectName]`, 'Init a project with default templete')
+    .command('update', 'Update vyron cli')
+    .command('pull', 'Pull the reoisitiry from github')
+    .command('remove', 'Remove directory or file')
+    .parse(process.argv);

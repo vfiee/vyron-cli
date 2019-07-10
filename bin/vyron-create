@@ -1,0 +1,22 @@
+#! /usr/bin/env node
+
+const program = require('commander');
+
+const Creator = require('../util/creator').default;
+
+program
+    .option('--template [taro,flutter]', '项目类型')
+    .option('--name [name]', '项目名称')
+    .option('--description [description]', '项目介绍')
+    .parse(process.argv);
+
+const args = program.args;
+
+const project = new Creator({
+    template: args[0],
+    projectName: args[1],
+    description: args[2],
+    projectDir: process.cwd(),
+});
+
+project.create();
