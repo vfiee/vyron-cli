@@ -1,7 +1,34 @@
 #! /usr/bin/env node
 
 // const program = require('commander');
+// const chalk = require('chalk').default;
+const { getUpdateCliCommand } = require('../util');
+const child_process = require('child_process');
+
+
+// program.parse(process.args);
 
 // const args = program.args;
+const execSync = child_process.execSync;
 
-console.log('update');
+
+updateCli();
+
+// function updateInfo() {
+//     console.log(chalk.yellow('更新 vyron-cli ?'));
+//     console.log(chalk.gray(`试试 vyron update \n`));
+// }
+
+function updateCli() {
+    let command = getUpdateCliCommand();
+    const child = execSync(command);
+    const spinner = ora('即将更新 vyron-cli 到最新版本...').start();
+    child.stdout.on('data', function (data) {
+        console.log(data)
+        spinner.stop()
+    });
+    child.stderr.on('data', function (data) {
+        console.log(data)
+        spinner.stop()
+    });
+}

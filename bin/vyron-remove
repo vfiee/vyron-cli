@@ -1,0 +1,53 @@
+#! /usr/bin/env node
+
+const fs = require('fs-extra');
+const path = require('path');
+const commander = require('commander');
+const child_process = require('child_process');
+const chalk = require('chalk').default;
+
+commander.parse(process.argv);
+
+const execSync = child_process.execSync;
+const args = commander.args;
+
+// 命令格式   vyron remove[tmpDir]
+
+
+if (args.length === 1) {
+    let tmpDir = args[0];
+    if (!fs.existsSync(tmpDir)) {
+        tmpDirNotExistInfo();
+    } else if (fs.statSync(tmpDir).isDirectory()) {
+        removeDirectory();
+    } else if (fs.statSync(tmpDir).isFile()) {
+        removeFile();
+    }
+} else {
+    removeInfo();
+}
+
+function removeInfo() {
+    console.log(`${chalk.red('命令错误')}
+        ${chalk.gray(`试试命令: vyron remove ${args[0]}`)}
+    `);
+}
+
+function tmpDirNotExistInfo() {
+    let tmpDir = path.join(process.cwd(), args[0]);
+    console.log(chalk.yellow(`❌  删除的文件路径 ${chalk.red(tmpDir)} 不存在 \n`));
+}
+
+function removeDirectory() {
+    let tmpDir = path.join(process.cwd(), args[0]);
+    console.log(`即将删除文件夹${chalk.yellow(`: ${tmpDir}`)}`);
+    execSync(`rm -rf ${tmpDir}`);
+    console.log(`文件夹 ${chalk.green(`${tmpDir}`)} 删除成功`);
+}
+
+function removeFile() {
+    let tmpDir = path.join(process.cwd(), args[0]);
+    console.log(`即将删除文件${chalk.yellow(`: ${tmpDir}`)}`);
+    execSync(`rm ${tmpDir}`);
+    console.log(`文件 ${chalk.green(`${tmpDir}`)} 删除成功`);
+}

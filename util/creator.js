@@ -33,7 +33,10 @@ class Creator {
                 choices: this.getTemplates(),
             });
         }
-        if (!config['projectName'] || typeof config['projectName'] !== 'string') {
+        if (!config['projectName'] ||
+            typeof config['projectName'] !== 'string' ||
+            !conf.program.includes(config['projectName'])
+        ) {
             prompts.push({
                 type: 'input',
                 name: 'projectName',
@@ -81,7 +84,7 @@ class Creator {
     pull() {
         let { template, projectName, description, projectDir, } = this.config;
         const pullIns = new Pull({
-            url: conf.respository[template],
+            template,
             projectName,
             description,
             projectDir,
