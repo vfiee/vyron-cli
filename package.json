@@ -2,7 +2,7 @@
   "name": "vyron-cli",
   "version": "1.0.0",
   "description": "a cli for work",
-  "repository": "git@github.com:VFiee/vyron-cli.git",
+  "repository": "https://github.com/VFiee/vyron-cli.git",
   "author": "Vyron <fiee_vyron@163.com>",
   "license": "MIT",
   "bin": {
@@ -14,8 +14,8 @@
     "commander": "^2.20.0",
     "download-git-repo": "^2.0.0",
     "fs-extra": "^8.1.0",
-    "global": "^4.4.0",
     "inquirer": "^6.5.0",
-    "lodash": "^4.17.14"
+    "js-yaml": "^3.13.1",
+    "lodash": "^4.17.15"
   }
 }

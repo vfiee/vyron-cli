@@ -1,10 +1,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 
 const _ = require('lodash');
+const path = require('path');
 const fs = require('fs-extra');
 const inquirer = require('inquirer');
+const child_process = require('child_process');
+const yaml = require('js-yaml');
 const Pull = require('../util/pull').default;
 const conf = require('../config').default;
+const {
+    consoleRed,
+    consoleGreen,
+    consoleYellow,
+    isCommandExist,
+} = require('../util');
+
+const execSync = child_process.execSync;
 
 class Creator {
     constructor(options) {
@@ -19,7 +30,7 @@ class Creator {
         this.ask()
             .then(answers => {
                 this.config = Object.assign(this.config, answers);
-                this.pull();
+                this.createProject();
             });
     }
     ask() {
@@ -81,15 +92,65 @@ class Creator {
     isInTemplates(template) {
         return conf.program.includes(template);
     }
-    pull() {
+    createProject() {
+        let { template } = this.config;
+        if (!template) {
+            consoleRed('您选择的模板不存在 \n');
+        } else if (template === 'flutter') {
+            this.createProjectByExec();
+        } else {
+            this.createProjectByGit();
+        }
+    }
+    writeDescription() {
+        let { projectDir, projectName, description } = this.config;
+        let caseProjectName = _.snakeCase(projectName);
+        let tmpdir = path.resolve(projectDir, `${caseProjectName}`);
+        let yamlPath = path.join(tmpdir, 'pubspec.yaml');
+        try {
+            consoleYellow(`读取${yamlPath}文件中.... \n`);
+            fs.existsSync(yamlPath);
+        } catch (error) {
+            consoleRed(`${yamlPath}文件路径不存在`);
+            return;
+        }
+        consoleGreen(`✅  读取${yamlPath}成功! \n`);
+        let pubspecYaml = yaml.load(fs.readFileSync(yamlPath, 'utf-8'));
+        consoleYellow(`准备写入 projectname description 到 ${yamlPath}... \n`);
+        pubspecYaml.description = description;
+        pubspecYaml = yaml.dump(pubspecYaml, 'utf-8');
+        fs.writeFileSync(yamlPath, pubspecYaml, 'utf-8');
+        consoleGreen(`✅  写入pubspec.yaml成功! \n`);
+        consoleYellow(`获取 flutter 依赖包 \n`);
+        execSync(`cd ${tmpdir} && flutter packages get`);
+        consoleGreen(`✅  flutter packages get success! \n`);
+        consoleGreen(`🥰  happy coding flutter \n`);
+    }
+    createProjectByExec() {
+        let { projectName, projectDir, } = this.config;
+        if (!isCommandExist('flutter --version')) {
+            consoleRed(`command not found: flutter  \n`);
+            return;
+        }
+        let caseProjectName = _.snakeCase(projectName);
+        try {
+            consoleYellow(`正在创建flutter项目（${caseProjectName}）\n`);
+            execSync(`cd ${projectDir} && flutter create ${caseProjectName}`);
+            consoleGreen(`✅  flutter项目（${caseProjectName}）创建成功 \n`);
+            this.writeDescription();
+        } catch (err) {
+            consoleRed(err);
+        }
+    }
+    createProjectByGit() {
         let { template, projectName, description, projectDir, } = this.config;
-        const pullIns = new Pull({
+        const pullInstance = new Pull({
             template,
             projectName,
             description,
             projectDir,
         });
-        pullIns.pullProject();
+        pullInstance.pullProject();
     }
 }
 

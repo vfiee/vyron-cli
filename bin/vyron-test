@@ -1,0 +1,15 @@
+#! /usr/bin/env node
+
+const yamljs = require('js-yaml');
+const path = require('path');
+const fs = require('fs-extra');
+
+const jsonPath = path.resolve(__dirname, '..', 'test.json');
+const yamlPath = path.resolve(__dirname, '..', 'test.yaml');
+
+let yamlFile = yamljs.load(fs.readFileSync(yamlPath, 'utf-8'));
+yamlFile.description = '131312';
+let yamlfile2 = yamljs.dump(yamlFile, 'utf-8');
+console.log(
+    yamlfile2
+);

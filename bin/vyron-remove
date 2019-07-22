@@ -5,6 +5,7 @@ const path = require('path');
 const commander = require('commander');
 const child_process = require('child_process');
 const chalk = require('chalk').default;
+const { consoleYellow } = require('../util');
 
 commander.parse(process.argv);
 
@@ -35,7 +36,7 @@ function removeInfo() {
 
 function tmpDirNotExistInfo() {
     let tmpDir = path.join(process.cwd(), args[0]);
-    console.log(chalk.yellow(`❌  删除的文件路径 ${chalk.red(tmpDir)} 不存在 \n`));
+    consoleYellow(`❌  删除的文件路径 ${chalk.red(tmpDir)} 不存在 \n`);
 }
 
 function removeDirectory() {

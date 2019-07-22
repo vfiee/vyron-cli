@@ -45,14 +45,14 @@ class Pull {
         let pacakgeJson = fs.readJsonSync(tmpdir);
         console.log(chalk.green(`✅  读取${tmpdir}成功! \n`));
         console.log(chalk.yellow(`准备写入 projectname description 到 ${tmpdir}... \n`));
-        fs.writeJsonSync(tmpdir, {
+        fs.writeJsonSync(tmpdir, JSON.stringify({
             ...pacakgeJson,
             name: projectName,
             description,
-        });
+        }, null, 4));
         console.log(chalk.green('✅  写入package.json成功! \n'));
-        console.log(chalk.green('😸  🥰  😄   happy coding'));
-        if (template === 'taro') {
+        console.log(chalk.green('😸  happy coding'));
+        if (template !== 'flutter') {
             console.log(chalk.gray(`
             cd ${path.join(projectDir, projectName)} \n
             yarn install \n
