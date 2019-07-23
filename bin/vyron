@@ -12,6 +12,5 @@ program
     .command(`create [${config.program}] [projectName] [description]`, 'Init a project with default templete')
     .alias('init')
     .command('update', 'Update vyron cli')
-    .command('test', 'Update vyron cli')
     .command('remove [path]', 'Remove directory or file')
     .parse(process.argv);

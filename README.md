@@ -33,3 +33,17 @@ inquirer 命令行交互的时候你需要填project name等一系列信息，�
 child_process 执行终端命令行工具
 
 chalk  打印有颜色的log
+
+
+## 版本号格式
+使用 （major.minor.patch-stage.num） 的形式
+    stage 一般选用：alpha、beta、rc。
+
+### 递增一个修订号
+npm version patch
+
+### 递增一个次版本号
+npm version minor
+
+### 递增一个主版本号
+npm version major
