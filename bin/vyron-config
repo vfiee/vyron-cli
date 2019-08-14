@@ -1,0 +1,48 @@
+#! /usr/bin/env node
+
+const program = require('commander');
+const {
+    getConfig,
+    setConfig,
+    deleteConfig,
+    listConfig,
+    initConfig
+} = require('../dist/config');
+
+program
+    // .option('--json', '以 json 格式输出')
+    .on('--help', () => {
+        console.log();
+        console.log(`Commands:`);
+        console.log(`  vyron config get [key]      获取 config 单个配置`);
+        console.log(`  vyron config set [key]      设置 config 单个配置`);
+        console.log(`  vyron config delete [key]   删除 config 单个配置`);
+        console.log(`  vyron config list | ls      获取 config 配置`);
+        console.log(`  vyron config init           初始化 config 配置 \n`);
+    })
+    .parse(process.argv);
+
+const [cmd, key, value] = program.args;
+const { json = false } = program;
+
+switch (cmd) {
+    case "get":
+        getConfig(key);
+        break;
+    case "set":
+        setConfig(key, value);
+        break;
+    case "delete":
+        deleteConfig(key);
+        break;
+    case "init":
+        initConfig();
+        break;
+    case "list":
+    case "ls":
+        listConfig(json);
+        break;
+    default:
+        listConfig(json);
+        break;
+}

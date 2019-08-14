@@ -1,19 +1,24 @@
 #! /usr/bin/env node
 
+const _ = require('lodash');
 const fs = require('fs-extra');
 const path = require('path');
 const commander = require('commander');
 const child_process = require('child_process');
 const chalk = require('chalk').default;
-const { consoleYellow } = require('../util');
+const {
+    consoleYellow,
+    consoleRed,
+    consoleGreen,
+    consoleGrey,
+} = require('../dist/utils');
 
 commander.parse(process.argv);
 
 const execSync = child_process.execSync;
 const args = commander.args;
 
-// 命令格式   vyron remove[tmpDir]
-
+// 命令格式   vyron remove [tmpDir]
 
 if (args.length === 1) {
     let tmpDir = args[0];
@@ -24,14 +29,33 @@ if (args.length === 1) {
     } else if (fs.statSync(tmpDir).isFile()) {
         removeFile();
     }
+} else if (args.length > 1) {
+    removeAll();
 } else {
     removeInfo();
 }
 
+
+
 function removeInfo() {
-    console.log(`${chalk.red('命令错误')}
-        ${chalk.gray(`试试命令: vyron remove ${args[0]}`)}
-    `);
+    consoleRed(`命令错误 \n`);
+    consoleGrey(`试试命令: vyron remove ${args[0] || 'dir'}  \n`);
+}
+
+function removeAll() {
+    let filterArgs = _.filter(args, curr => fs.existsSync(curr));
+    let filterArgsStr = filterArgs.join(' ');
+    let diff = _.difference(args, filterArgs);
+    if (!filterArgs.length) {
+        consoleRed(`❌  删除的文件路径 ${args.join(' ')} 不存在 \n`)
+        return;
+    }
+    if (diff && diff.length) {
+        consoleRed(`❌  删除的文件路径 ${diff.join(' ')} 不存在 \n`)
+    }
+    consoleYellow(`即将删除文件：${filterArgsStr} \n `);
+    execSync(`rm -rf ${filterArgsStr}`);
+    consoleGreen(`✅  文件或文件夹： ${filterArgsStr} 删除成功 \n`);
 }
 
 function tmpDirNotExistInfo() {
@@ -41,14 +65,14 @@ function tmpDirNotExistInfo() {
 
 function removeDirectory() {
     let tmpDir = path.join(process.cwd(), args[0]);
-    console.log(`即将删除文件夹${chalk.yellow(`: ${tmpDir}`)}`);
+    consoleYellow(`即将删除文件夹${chalk.yellow(`: ${tmpDir}`)}\n`);
     execSync(`rm -rf ${tmpDir}`);
-    console.log(`文件夹 ${chalk.green(`${tmpDir}`)} 删除成功`);
+    consoleYellow(`✅  文件：${tmpDir} 删除成功 \n`);
 }
 
 function removeFile() {
     let tmpDir = path.join(process.cwd(), args[0]);
-    console.log(`即将删除文件${chalk.yellow(`: ${tmpDir}`)}`);
+    consoleYellow(`即将删除文件：${tmpDir} \n `);
     execSync(`rm ${tmpDir}`);
-    console.log(`文件 ${chalk.green(`${tmpDir}`)} 删除成功`);
+    consoleYellow(`✅  文件：${tmpDir} 删除成功 \n`);
 }

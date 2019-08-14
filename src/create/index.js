@@ -6,14 +6,14 @@ const fs = require('fs-extra');
 const inquirer = require('inquirer');
 const child_process = require('child_process');
 const yaml = require('js-yaml');
-const Pull = require('../util/pull').default;
-const conf = require('../config').default;
+const Download = require('../download').default;
+const conf = require('../../.vyron.json');
 const {
     consoleRed,
     consoleGreen,
     consoleYellow,
     isCommandExist,
-} = require('../util');
+} = require('../utils');
 
 const execSync = child_process.execSync;
 
@@ -96,6 +96,7 @@ class Creator {
         let { template } = this.config;
         if (!template) {
             consoleRed('您选择的模板不存在 \n');
+            return;
         } else if (template === 'flutter') {
             this.createProjectByExec();
         } else {
@@ -144,13 +145,13 @@ class Creator {
     }
     createProjectByGit() {
         let { template, projectName, description, projectDir, } = this.config;
-        const pullInstance = new Pull({
+        const DownloadIns = new Download({
             template,
             projectName,
             description,
             projectDir,
         });
-        pullInstance.pullProject();
+        DownloadIns.download();
     }
 }
 

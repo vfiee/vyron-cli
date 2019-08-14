@@ -8,7 +8,15 @@
   "bin": {
     "vyron": "bin/vyron"
   },
+  "scripts": {
+    "dev": "yarn clear && babel bin src -d dist --watch",
+    "build": "yarn clear && babel bin src -d dist",
+    "clear": "rm -rf dist",
+    "clean": "rm -rf yarn.lock package-lock.json node_modules"
+  },
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-env": "^2.4.1",
     "chalk": "^2.4.2",
     "child_process": "^1.0.2",
     "commander": "^2.20.0",
@@ -16,6 +24,9 @@
     "fs-extra": "^8.1.0",
     "inquirer": "^6.5.0",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "ora": "^3.4.0",
+    "path": "^0.12.7",
+    "request": "^2.88.0"
   }
 }

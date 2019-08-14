@@ -2,7 +2,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 const chalk = require('chalk').default;
 const child_process = require('child_process');
-const packageJson = require('../package.json');
+const packageJson = require('../../package.json');
 const execSync = child_process.execSync;
 
 
@@ -62,3 +62,17 @@ const isCommandExist = (command, options = {}) => {
     }
 }
 exports.isCommandExist = isCommandExist;
+
+const nodePromisify = (fn) => {
+    return function (...args) {
+        return new Promise((resolve, reject) => {
+            fn(...args, (err, ...others) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(...others);
+            });
+        });
+    };
+};
+exports.nodePromisify = nodePromisify;

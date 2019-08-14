@@ -2,7 +2,7 @@
 
 const program = require('commander');
 
-const Creator = require('../util/creator').default;
+const Creator = require('../dist/create').default;
 
 program
     .option('--template [taro,flutter]', '项目类型')
@@ -12,11 +12,11 @@ program
 
 const args = program.args;
 
-const project = new Creator({
+const Project = new Creator({
     template: args[0],
     projectName: args[1],
     description: args[2],
     projectDir: process.cwd(),
 });
 
-project.create();
+Project.create();
