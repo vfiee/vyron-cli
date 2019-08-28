@@ -1,6 +1,6 @@
 {
   "name": "vyron-cli",
-  "version": "1.0.2",
+  "version": "1.1.5",
   "description": "a cli for work",
   "repository": "https://github.com/VFiee/vyron-cli.git",
   "author": "Vyron <fiee_vyron@163.com>",
@@ -15,18 +15,26 @@
     "clean": "rm -rf yarn.lock package-lock.json node_modules"
   },
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-env": "^2.4.1",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/runtime": "^7.5.5",
     "chalk": "^2.4.2",
     "child_process": "^1.0.2",
     "commander": "^2.20.0",
+    "core-js": "2",
     "download-git-repo": "^2.0.0",
     "fs-extra": "^8.1.0",
     "inquirer": "^6.5.0",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
     "ora": "^3.4.0",
+    "os": "^0.1.1",
     "path": "^0.12.7",
     "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.5.5"
   }
 }

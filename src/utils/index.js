@@ -1,5 +1,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 
+const os = require('os');
 const chalk = require('chalk').default;
 const child_process = require('child_process');
 const packageJson = require('../../package.json');
@@ -76,3 +77,26 @@ const nodePromisify = (fn) => {
     };
 };
 exports.nodePromisify = nodePromisify;
+
+
+
+function getUserHomeDir() {
+    function homedir() {
+        const env = process.env;
+        const home = env.HOME;
+        const user = env.LOGNAME || env.USER || env.LNAME || env.USERNAME;
+        if (process.platform === 'win32') {
+            return env.USERPROFILE || '' + env.HOMEDRIVE + env.HOMEPATH || home || '';
+        }
+        if (process.platform === 'darwin') {
+            return home || (user ? '/Users/' + user : '');
+        }
+        if (process.platform === 'linux') {
+            return home || (process.getuid() === 0 ? '/root' : (user ? '/home/' + user : ''));
+        }
+        return home || '';
+    }
+    return typeof os.homedir === 'function' ? os.homedir() : homedir();
+}
+
+exports.getUserHomeDir = getUserHomeDir;

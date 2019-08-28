@@ -35,7 +35,7 @@ class Download {
         console.log(`🆕  Creating project in ${chalk.yellow(tmpdir)} \n`);
         consoleGreen(`⭕️  Pulling repository. This might take a while... \n`);
         download(url, tmpdir, { clone: true }, err => {
-            let msg = err ? chalk.red('❎  Something wrong happend') : chalk.green('🎉  Pull successed');
+            let msg = err ? chalk.red(`❎  ${err.toString()}`) : chalk.green('🎉  Pull successed');
             console.log(`${msg} \n`);
             this.writePackageJson();
         });

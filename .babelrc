@@ -1,13 +1,36 @@
 {
-  "presets": [
-    "env",
-    "react",
-    "stage-0"
-  ],
   "plugins": [
-    "transform-class-properties",
-    "transform-decorators",
-    "transform-react-constant-elements",
-    "transform-react-inline-elements"
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        // 是否转化 内置函数(如：Promise, Set, Symbol) 或者 静态方法(如：Object.assign, Array.from)
+        "corejs": false,
+        // 默认，可以不写
+        "helpers": true,
+        // 通过 preset-env 已经使用了全局的 regeneratorRuntime, 不再需要 transform-runtime 提供的 不污染全局的 regeneratorRuntime
+        "regenerator": false,
+        // 使用 es modules helpers, 减少 commonJS 语法代码
+        "useESModules": false,
+      }
+    ]
+  ],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        // "amd" | "umd" | "systemjs" | "commonjs" | "cjs" | false, defaults to "commonjs".
+        "modules": "commonjs",
+        // 默认 false, 可选 entry , usage
+        "useBuiltIns": "usage",
+        "corejs": 2,
+      }
+    ]
   ]
 }
+/*
+  1.presets plugins将未支持的语法编译成浏览器支持的语法
+
+  2.polyfill 将未支持的Apis编译成浏览器支持的语法
+
+  3.babel-runtime babel-plugin-transform-runtime在编译时，使生成的代码保持整洁
+*/
